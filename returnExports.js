@@ -15,19 +15,23 @@
 // the top function.
 
 (function (root, factory) {
+    var deps = [
+        'b',
+        'c'
+    ];
     if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('b'));
+        module.exports = factory.apply(root, deps.map(function (dep) { return require(dep); }));
     } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['b'], factory);
+        define(deps, factory);
     } else {
         // Browser globals
-        root.returnExports = factory(root.b);
+        root.returnExports = factory.apply(root, deps.map(function (dep) { return root[dep]; }));
     }
-}(this, function (b) {
+}(this, function (b, c) {
     //use b in some fashion.
 
     // Just return a value to define the module export.
